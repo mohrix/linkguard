@@ -30,9 +30,7 @@ function save() {
   if (!cache) return;
   try {
     fs.writeFileSync(P, JSON.stringify(cache, null, 2));
-  } catch {
-    /* ignore */
-  }
+  } catch { /* ignore */ }
 }
 
 export const db = {
@@ -46,10 +44,7 @@ export const db = {
     return load().analyses.find((a) => a.id === id) ?? null;
   },
   listHistory(limit = 50) {
-    return load()
-      .analyses.slice()
-      .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
-      .slice(0, limit);
+    return load().analyses.slice().sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1)).slice(0, limit);
   },
   stats() {
     const d = load();
@@ -66,10 +61,7 @@ export const db = {
       total: d.analyses.length,
       byClass,
       tor,
-      topTlds: Object.entries(tlds)
-        .sort((x, y) => y[1] - x[1])
-        .slice(0, 5)
-        .map(([tld, count]) => ({ tld, count })),
+      topTlds: Object.entries(tlds).sort((x, y) => y[1] - x[1]).slice(0, 5).map(([tld, count]) => ({ tld, count })),
       reports: d.reports.length,
     };
   },

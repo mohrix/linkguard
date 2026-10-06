@@ -34,15 +34,13 @@ export async function runAnalysis(rawUrl: string): Promise<AnalysisReport> {
   const providers = getProviders();
   const intel: ThreatIntelVerdict[] = await Promise.all(
     providers.map((p) =>
-      p
-        .check({ url: parsed.normalized, domain: parsed.hostname })
-        .catch(
-          (): ThreatIntelVerdict => ({
-            provider: p.name,
-            verdict: 'unavailable',
-            details: 'Provider error',
-          })
-        )
+      p.check({ url: parsed.normalized, domain: parsed.hostname }).catch(
+        (): ThreatIntelVerdict => ({
+          provider: p.name,
+          verdict: 'unavailable',
+          details: 'Provider error',
+        })
+      )
     )
   );
 
@@ -85,18 +83,9 @@ export async function runAnalysis(rawUrl: string): Promise<AnalysisReport> {
     tlsAnalysis: pick('TLS Analyzer'),
     headerAnalysis: pick('Header Analyzer'),
     torAnalysis: pick('Tor Analyzer'),
-    analyzers: analyzers.map((a) => ({
-      name: a.name,
-      score: a.score,
-      status: a.status,
-      weight: a.weight,
-    })),
+    analyzers: analyzers.map((a) => ({ name: a.name, score: a.score, status: a.status, weight: a.weight })),
     threatIntel: {
-      providers: intel.map((r) => ({
-        name: r.provider,
-        verdict: r.verdict,
-        details: r.details,
-      })),
+      providers: intel.map((r) => ({ name: r.provider, verdict: r.verdict, details: r.details })),
     },
     timestamp: new Date().toISOString(),
   };
